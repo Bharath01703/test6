@@ -23,6 +23,5 @@ jobs:
           pip install pandas selenium boto3
 
       - name: Run Python Script
-    
         run: |
           python code.py
