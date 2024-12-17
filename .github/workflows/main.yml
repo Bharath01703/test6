@@ -1,4 +1,4 @@
-name: Run Python Script Every 5 Minutes  # Workflow name
+name: Run Python Script Every 5 Minutes
 
 on:
   schedule:
@@ -20,8 +20,21 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
+          python -m pip install --upgrade pip  # Ensure pip is up-to-date
           pip install pandas selenium boto3
+
+      - name: Debug Environment
+        run: |
+          echo "Python Version:"
+          python --version
+          echo "Installed Packages:"
+          pip list
+          echo "Current Directory Contents:"
+          ls -la
+
+      - name: Add Execution Permissions to Script
+        run: chmod +x code.py
 
       - name: Run Python Script
         run: |
-          python code.py
+          python -u code.py  # Run with unbuffered output for live logs
