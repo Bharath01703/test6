@@ -1,0 +1,41 @@
+name: Run Python Script Every 5 Minutes  # Workflow name
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu version
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Check out the repository's code
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Use Python 3.9
+
+      - name: Install Chrome and ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          # Install Google Chrome
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
+          # Install ChromeDriver
+          wget https://storage.googleapis.com/chrome-for-testing-public/123.0.6312.122/linux64/chromedriver-linux64.zip -O chromedriver.zip
+          unzip chromedriver.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+
+      - name: Install Python Dependencies
+        run: |
+          pip install pandas selenium boto3
+
+      - name: Run Python Script
+    
+        run: |
+          python code.py
